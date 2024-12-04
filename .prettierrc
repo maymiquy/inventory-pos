@@ -1,7 +1,10 @@
 {
-    "singleQuote": true,
-    "plugins": [
-        "prettier-plugin-organize-imports",
-        "prettier-plugin-tailwindcss"
-    ]
+   "printWidth": 60,
+   "tabWidth": 4,
+   "trailingComma": "es5",
+   "singleQuote": true,
+   "plugins": [
+      "prettier-plugin-organize-imports",
+      "prettier-plugin-tailwindcss"
+   ]
 }
