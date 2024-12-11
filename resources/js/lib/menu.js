@@ -19,21 +19,21 @@ const getMenu = (pathname) => {
             menus: [
                 {
                     label: 'Products',
-                    href: '/dashboard/products',
+                    href: '/products',
                     active: pathname.includes('/products'),
                     icon: Package,
                     submenus: []
                 },
                 {
                     label: 'Customers',
-                    href: '/dashboard/customers',
+                    href: '/customers',
                     active: pathname.includes('/customers'),
                     icon: Users,
                     submenus: []
                 },
                 {
                     label: 'Suppliers',
-                    href: '/dashboard/suppliers',
+                    href: '/suppliers',
                     active: pathname.includes('/suppliers'),
                     icon: Warehouse,
                     submenus: []
@@ -45,21 +45,21 @@ const getMenu = (pathname) => {
             menus: [
                 {
                     label: 'Incomes',
-                    href: '/dashboard/incomes',
+                    href: '/incomes',
                     active: pathname.includes('/incomes'),
                     icon: TrendingUp,
                     submenus: []
                 },
                 {
                     label: 'Expenses',
-                    href: '/dashboard/expenses',
+                    href: '/expenses',
                     active: pathname.includes('/expenses'),
                     icon: TrendingDown,
                     submenus: []
                 },
                 {
                     label: 'Reports',
-                    href: '/dashboard/reports',
+                    href: '/reports',
                     active: pathname.includes('/reports'),
                     icon: ChartNoAxesCombined,
                     submenus: []

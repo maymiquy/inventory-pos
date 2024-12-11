@@ -92,7 +92,7 @@ const MenuLink = ({ isOpen }) => {
                                   className="mb-1 h-10 w-full justify-start"
                                   asChild
                                 >
-                                  <Link to={href}>
+                                  <Link href={href}>
                                     <span
                                       className={cn(
                                         isOpen === false
