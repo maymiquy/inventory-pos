@@ -22,7 +22,7 @@ const Breadcrumbs = (props) => {
                 </BreadcrumbPage>
               ) : (
                 <BreadcrumbLink asChild>
-                  <Link to={item.href}>{item.label}</Link>
+                  <Link href={item.href}>{item.label}</Link>
                 </BreadcrumbLink>
               )}
             </BreadcrumbItem>

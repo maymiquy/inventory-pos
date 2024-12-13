@@ -11,29 +11,36 @@ import { cn } from '../lib/utils';
 
 const DashboardLayout = ({ children }) => {
   const user = usePage().props.auth.user;
-  const type = window.location.pathname;
   const [title, setTitle] = useState('');
   const [breadcrumbList, setBreadcrumbList] = useState([]);
   const pathname = window.location.pathname;
-  const menuList = getMenu(pathname);
-  const menus = menuList.map(({ menus }) => menus);
-  const { label = '', href = '' } = menus
-    .flat()
-    .find((item) => `${item.href}` === pathname) ?? {
-    label: `${type.charAt(0).toUpperCase() + type.slice(1)}`,
+  const { label = '', href = '' } = getMenu(pathname)
+    .flatMap(({ menus }) => menus)
+    .find(({ href }) => href === pathname) ?? {
+    label:
+      pathname.split('/')[1].charAt(0).toUpperCase() +
+      pathname.split('/')[1].slice(1),
     href: '',
   };
 
   useEffect(() => {
-    setTitle(label);
+    const pathParts = pathname.split('/').filter(Boolean);
+    const lastPath = pathParts[pathParts.length - 1];
+    const formattedLabel =
+      pathParts.length > 1
+        ? `${label} ${lastPath.charAt(0).toUpperCase() + lastPath.slice(1)}`
+        : label;
+    setTitle(formattedLabel.trim());
 
-    const breadcrumbItems = [{ label: label, href: href }];
-    if (pathname !== '/dashboard') {
-      breadcrumbItems.unshift({
-        label: 'Dashboard',
-        href: '/dashboard',
-      });
-    }
+    const breadcrumbItems = [
+      ...(pathname !== '/dashboard'
+        ? [{ label: 'Dashboard', href: '/dashboard' }]
+        : []),
+      ...pathParts.map((part, i) => ({
+        label: part.charAt(0).toUpperCase() + part.slice(1),
+        href: `/${pathParts.slice(0, i + 1).join('/')}`,
+      })),
+    ];
 
     setBreadcrumbList(breadcrumbItems);
   }, [pathname, label, href]);
