@@ -4,6 +4,7 @@ import TextInput from '@/components/ui/text-input';
 import GuestLayout from '@/layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { Button } from '../../components/ui/button';
+import { toast } from '../../hooks/use-toast';
 
 export default function Register() {
   const { data, setData, post, processing, errors, reset } =
@@ -18,6 +19,22 @@ export default function Register() {
     e.preventDefault();
 
     post(route('register'), {
+      preserveScroll: true,
+      onSuccess: () => {
+        toast({
+          title: 'Successfully Register',
+          description: 'Your successfully register',
+          variant: 'success',
+        });
+      },
+      onError: () => {
+        toast({
+          title: 'Failed to Register',
+          description:
+            'Something went wrong trying to register, please try again',
+          variant: 'destructive',
+        });
+      },
       onFinish: () =>
         reset('password', 'password_confirmation'),
     });

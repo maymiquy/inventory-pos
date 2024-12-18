@@ -1,6 +1,7 @@
 import { useForm } from '@inertiajs/react';
 import { LogOut, User, UserCog } from 'lucide-react';
 import { useRef } from 'react';
+import { toast } from '../../../../hooks/use-toast';
 import {
   Avatar,
   AvatarFallback,
@@ -37,7 +38,22 @@ const UserAvatar = (props) => {
   const handleLogout = () => {
     post(route('logout'), {
       _token: csrfToken.current,
-      onFinish: () => {},
+      onSuccess: () => {
+        toast({
+          title: 'Successfully Sign Out',
+          description: 'Your successfully sign out',
+          variant: 'success',
+        });
+      },
+      onError: () => {
+        toast({
+          title: 'Failed to Sign Out',
+          description:
+            'Something went wrong trying to sign out',
+          variant: 'destructive',
+        });
+      },
+      onFinish: () => reset('password'),
     });
   };
 

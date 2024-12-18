@@ -5,6 +5,7 @@ import TextInput from '@/components/ui/text-input';
 import GuestLayout from '@/layouts/GuestLayout';
 import { Head, useForm } from '@inertiajs/react';
 import { Button } from '../../components/ui/button';
+import { toast } from '../../hooks/use-toast';
 
 export default function Login({ status }) {
   const { data, setData, post, processing, errors, reset } =
@@ -18,6 +19,21 @@ export default function Login({ status }) {
     e.preventDefault();
 
     post(route('login'), {
+      onSuccess: () => {
+        toast({
+          title: 'Successfully Sign In',
+          description: 'Your successfully sign in',
+          variant: 'success',
+        });
+      },
+      onError: () => {
+        toast({
+          title: 'Failed to Sign In',
+          description:
+            'Something went wrong trying to sign in, please try again',
+          variant: 'destructive',
+        });
+      },
       onFinish: () => reset('password'),
     });
   };
