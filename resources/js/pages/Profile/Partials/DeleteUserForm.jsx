@@ -1,10 +1,10 @@
 import InputError from '@/components/ui/input-error';
-import InputLabel from '@/components/ui/input-label';
 import Modal from '@/components/ui/modal';
-import TextInput from '@/components/ui/text-input';
 import { useForm } from '@inertiajs/react';
 import { useRef, useState } from 'react';
 import { Button } from '../../../components/ui/button';
+import { Input } from '../../../components/ui/input';
+import { Label } from '../../../components/ui/label';
 
 export default function DeleteUserForm({ className = '' }) {
   const [
@@ -86,13 +86,11 @@ export default function DeleteUserForm({ className = '' }) {
           </p>
 
           <div className="mt-6 w-full">
-            <InputLabel
-              htmlFor="password"
-              value="Password"
-              className="sr-only"
-            />
+            <Label className="sr-only" htmlFor="name">
+              Name
+            </Label>
 
-            <TextInput
+            <Input
               className="mt-1 block w-full"
               id="password"
               type="password"

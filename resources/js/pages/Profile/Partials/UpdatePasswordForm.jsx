@@ -1,10 +1,10 @@
 import InputError from '@/components/ui/input-error';
-import InputLabel from '@/components/ui/input-label';
-import TextInput from '@/components/ui/text-input';
 import { Transition } from '@headlessui/react';
 import { useForm } from '@inertiajs/react';
 import { useRef } from 'react';
 import { Button } from '../../../components/ui/button';
+import { Input } from '../../../components/ui/input';
+import { Label } from '../../../components/ui/label';
 
 export default function UpdatePasswordForm({
   className = '',
@@ -64,12 +64,11 @@ export default function UpdatePasswordForm({
         className="mt-6 space-y-6 xl:space-y-12"
       >
         <div>
-          <InputLabel
-            htmlFor="current_password"
-            value="Current Password"
-          />
+          <Label htmlFor="current_password">
+            Current Password
+          </Label>
 
-          <TextInput
+          <Input
             id="current_password"
             ref={currentPasswordInput}
             value={data.current_password}
@@ -88,12 +87,9 @@ export default function UpdatePasswordForm({
         </div>
 
         <div>
-          <InputLabel
-            htmlFor="password"
-            value="New Password"
-          />
+          <Label htmlFor="password">New Password</Label>
 
-          <TextInput
+          <Input
             id="password"
             ref={passwordInput}
             value={data.password}
@@ -112,12 +108,11 @@ export default function UpdatePasswordForm({
         </div>
 
         <div>
-          <InputLabel
-            htmlFor="password_confirmation"
-            value="Confirm Password"
-          />
+          <Label htmlFor="password_confirmation">
+            Confirm Password
+          </Label>
 
-          <TextInput
+          <Input
             id="password_confirmation"
             value={data.password_confirmation}
             onChange={(e) =>

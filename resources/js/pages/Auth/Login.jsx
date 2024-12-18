@@ -1,10 +1,10 @@
 import Checkbox from '@/components/ui/checkbox';
 import InputError from '@/components/ui/input-error';
-import InputLabel from '@/components/ui/input-label';
-import TextInput from '@/components/ui/text-input';
 import GuestLayout from '@/layouts/GuestLayout';
 import { Head, useForm } from '@inertiajs/react';
 import { Button } from '../../components/ui/button';
+import { Input } from '../../components/ui/input';
+import { Label } from '../../components/ui/label';
 import { toast } from '../../hooks/use-toast';
 
 export default function Login({ status }) {
@@ -59,16 +59,15 @@ export default function Login({ status }) {
 
       <form onSubmit={submit}>
         <div>
-          <InputLabel htmlFor="email" value="Email" />
+          <Label htmlFor="email">Email</Label>
 
-          <TextInput
+          <Input
             id="email"
             type="email"
             name="email"
             value={data.email}
             className="mt-1 block w-full"
-            autoComplete="username"
-            isFocused={true}
+            autoComplete="email"
             onChange={(e) =>
               setData('email', e.target.value)
             }
@@ -81,9 +80,9 @@ export default function Login({ status }) {
         </div>
 
         <div className="mt-4">
-          <InputLabel htmlFor="password" value="Password" />
+          <Label htmlFor="password">Password</Label>
 
-          <TextInput
+          <Input
             id="password"
             type="password"
             name="password"

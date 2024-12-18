@@ -1,9 +1,9 @@
 import InputError from '@/components/ui/input-error';
-import InputLabel from '@/components/ui/input-label';
-import TextInput from '@/components/ui/text-input';
+import Input from '@/components/ui/text-input';
 import { Transition } from '@headlessui/react';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { Button } from '../../../components/ui/button';
+import { Label } from '../../../components/ui/label';
 
 export default function UpdateProfileInformation({
   mustVerifyEmail,
@@ -45,9 +45,9 @@ export default function UpdateProfileInformation({
 
       <form onSubmit={submit} className="mt-6 space-y-6">
         <div>
-          <InputLabel htmlFor="name" value="Name" />
+          <Label htmlFor="name">Name</Label>
 
-          <TextInput
+          <Input
             id="name"
             className="mt-1 block w-full"
             value={data.name}
@@ -66,9 +66,9 @@ export default function UpdateProfileInformation({
         </div>
 
         <div>
-          <InputLabel htmlFor="email" value="Email" />
+          <Label htmlFor="email">Email</Label>
 
-          <TextInput
+          <Input
             id="email"
             type="email"
             className="mt-1 block w-full"
