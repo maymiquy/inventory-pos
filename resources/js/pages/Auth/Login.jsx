@@ -1,15 +1,12 @@
-import Checkbox from '@/components/Checkbox';
-import InputError from '@/components/InputError';
-import InputLabel from '@/components/InputLabel';
-import PrimaryButton from '@/components/PrimaryButton';
-import TextInput from '@/components/TextInput';
+import Checkbox from '@/components/ui/checkbox';
+import InputError from '@/components/ui/input-error';
+import InputLabel from '@/components/ui/input-label';
+import TextInput from '@/components/ui/text-input';
 import GuestLayout from '@/layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
+import { Button } from '../../components/ui/button';
 
-export default function Login({
-  status,
-  canResetPassword,
-}) {
+export default function Login({ status }) {
   const { data, setData, post, processing, errors, reset } =
     useForm({
       email: '',
@@ -104,21 +101,13 @@ export default function Login({
         </div>
 
         <div className="mt-4 flex items-center justify-end">
-          {canResetPassword && (
-            <Link
-              href={route('password.request')}
-              className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            >
-              Forgot your password?
-            </Link>
-          )}
-
-          <PrimaryButton
+          <Button
+            type="submit"
             className="ms-4"
             disabled={processing}
           >
             Sign in
-          </PrimaryButton>
+          </Button>
         </div>
       </form>
     </GuestLayout>
