@@ -6,13 +6,17 @@ use App\Models\Income;
 use App\Models\Expense;
 use App\Models\Report;
 use Carbon\Carbon;
+use Inertia\Inertia;
 
 class ReportController extends Controller
 {
     public function index()
     {
         $reports = Report::all();
-        return view('reports.index', compact('reports'));
+
+        return Inertia::render('Reports/Index', [
+            'reports' => $reports,
+        ]);
     }
 
     public function generateReports()
@@ -65,9 +69,9 @@ class ReportController extends Controller
         $averageIncome = $totalIncome / $numReports;
         $averageExpense = $totalExpense / $numReports;
 
-        return view('reports.averages', [
+        return Inertia::render('Reports/Index', [
             'averageIncome' => $averageIncome,
-            'averageExpense' => $averageExpense,
+            'averageExpense' => $averageExpense
         ]);
     }
 }

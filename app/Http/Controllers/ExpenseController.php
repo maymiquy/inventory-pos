@@ -15,9 +15,24 @@ class ExpenseController extends Controller
      */
     public function index()
     {
-        $expenses = Expense::with('product', 'supplier')->get();
+        $expenses = Expense::query()
+            ->with('product', 'supplier')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->transform(function ($expense) {
+                return [
+                    'id' => $expense->id,
+                    'product' => $expense->product->name,
+                    'supplier' => $expense->supplier->name,
+                    'quantity' => $expense->quantity,
+                    'price_per_item' => $expense->price_per_item,
+                    'total_amount' => $expense->total_amount,
+                    'restock_date' => $expense->restock_date,
+                ];
+            });
+
         return Inertia::render('Expenses/Index', [
-            'expenses' => $expenses,
+            'expenses' => $expenses
         ]);
     }
 

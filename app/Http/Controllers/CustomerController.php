@@ -13,8 +13,18 @@ class CustomerController extends Controller
      */
     public function index()
     {
+        $customers = Customer::query()
+            ->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->through(fn($customer) => [
+                'id' => $customer->id,
+                'name' => $customer->name,
+                'email' => $customer->email,
+                'phone' => $customer->phone,
+            ]);
+
         return Inertia::render('Customers/Index', [
-            'customers' => Customer::all(),
+            'customers' => $customers,
         ]);
     }
 

@@ -18,7 +18,7 @@ const Index = () => {
     router.get(
       route('products.index', { page }),
       {},
-      { preserveState: true }
+      { preserveState: true, preserveScroll: true }
     );
   };
 
@@ -28,8 +28,9 @@ const Index = () => {
         <div className="flex w-full flex-row justify-between">
           <div>
             <p className="text-xs text-muted-foreground">
-              Showing {products.from} to {products.to} of{' '}
-              {products.total} data entries
+              Showing {products?.from || 0} to{' '}
+              {products?.to || 0} of {products?.total} data
+              entries
             </p>
           </div>
           <div>{/* <SearchBar /> */}</div>

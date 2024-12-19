@@ -15,7 +15,22 @@ class IncomeController extends Controller
      */
     public function index()
     {
-        $incomes = Income::with('product', 'customer')->get();
+        $incomes = Income::query()
+            ->with('product', 'customer')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->transform(function ($income) {
+                return [
+                    'id' => $income->id,
+                    'product' => $income->product->name,
+                    'customer' => $income->customer->name,
+                    'quantity' => $income->quantity,
+                    'price_per_item' => $income->price_per_item,
+                    'total_amount' => $income->total_amount,
+                    'purchase_date' => $income->purchase_date,
+                ];
+            });
+
         return Inertia::render('Incomes/Index', [
             'incomes' => $incomes,
         ]);

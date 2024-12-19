@@ -13,8 +13,18 @@ class SupplierController extends Controller
      */
     public function index()
     {
+        $suppliers = Supplier::query()
+            ->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->through(fn($supplier) => [
+                'id' => $supplier->id,
+                'company_name' => $supplier->company_name,
+                'email' => $supplier->email,
+                'phone' => $supplier->phone,
+            ]);
+
         return Inertia::render('Suppliers/Index', [
-            'suppliers' => Supplier::all(),
+            'suppliers' => $suppliers,
         ]);
     }
 

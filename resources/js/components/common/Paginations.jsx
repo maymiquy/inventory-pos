@@ -9,8 +9,8 @@ import {
 } from '../ui/pagination';
 
 const Paginations = ({
-  totalPages,
-  currentPage,
+  totalPages = 0,
+  currentPage = 0,
   onPageChange,
 }) => {
   const handlePageClick = (pageNumber) => {
@@ -18,6 +18,9 @@ const Paginations = ({
       onPageChange(pageNumber);
     }
   };
+
+  console.log(totalPages);
+  console.log(currentPage);
 
   const renderPageNumbers = () => {
     const pageNumbers = [];
@@ -109,8 +112,9 @@ const Paginations = ({
           <PaginationPrevious
             href="#"
             onClick={() => handlePageClick(currentPage - 1)}
+            disabled={currentPage === 1 || totalPages === 0}
             className={
-              currentPage === 1
+              currentPage === 1 || totalPages === 0
                 ? 'pointer-events-none opacity-50'
                 : ''
             }
@@ -121,8 +125,11 @@ const Paginations = ({
           <PaginationNext
             href="#"
             onClick={() => handlePageClick(currentPage + 1)}
+            disabled={
+              currentPage === totalPages || totalPages === 0
+            }
             className={
-              currentPage === totalPages
+              currentPage === totalPages || totalPages === 0
                 ? 'pointer-events-none opacity-50'
                 : ''
             }

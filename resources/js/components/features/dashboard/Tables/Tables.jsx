@@ -71,7 +71,7 @@ const Tables = ({ columns, data, indexData }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.length > 0 ? (
+          {data?.length > 0 ? (
             data.map((row, index) => (
               <TableRow
                 className="hover:bg-zinc-100"
@@ -171,15 +171,17 @@ const Tables = ({ columns, data, indexData }) => {
                   <p className="text-center text-xl text-zinc-500">
                     No data availables
                   </p>
-                  {data.length === 0 && (
-                    <span className="text-center text-xs font-extralight text-zinc-400">
-                      0 rows affected (
-                      {(Math.random() * 0.3 + 0.2).toFixed(
-                        1
-                      )}{' '}
-                      s)
-                    </span>
-                  )}
+                  {data?.length === 0 ||
+                    (data?.length === undefined && (
+                      <span className="text-center text-xs font-extralight text-zinc-400">
+                        0 rows affected (
+                        {(
+                          Math.random() * 0.3 +
+                          0.2
+                        ).toFixed(1)}{' '}
+                        s)
+                      </span>
+                    ))}
                 </div>
               </TableCell>
             </TableRow>
