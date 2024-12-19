@@ -1,31 +1,26 @@
-import { usePage } from '@inertiajs/react';
-import { useState } from 'react';
-import Paginations from '../../components/common/Paginations';
-import Tables from '../../components/features/dashboard/Tables/Tables';
-import DashboardLayout from '../../layouts/DashboardLayout';
+import { router, usePage } from '@inertiajs/react';
+import Paginations from '../../Components/common/Paginations';
+import Tables from '../../Components/features/dashboard/Tables/Tables';
+import DashboardLayout from '../../Layouts/DashboardLayout';
 
 const Index = () => {
   const { products } = usePage().props;
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-  const totalPages = Math.ceil(
-    products.length / itemsPerPage
-  );
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = products.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
 
   const columns = [
-    { title: '', field: 'id' },
+    { title: 'ID', field: 'id' },
     { title: 'Name', field: 'name' },
     { title: 'Description', field: 'description' },
     { title: 'Price', field: 'price' },
     { title: 'Quantity', field: 'quantity' },
   ];
+
+  const handlePageChange = (page) => {
+    router.get(
+      route('products.index', { page }),
+      {},
+      { preserveState: true }
+    );
+  };
 
   return (
     <DashboardLayout>
@@ -33,22 +28,23 @@ const Index = () => {
         <div className="flex w-full flex-row justify-between">
           <div>
             <p className="text-xs text-muted-foreground">
-              Showing {indexOfFirstItem + 1} to{' '}
-              {indexOfLastItem} of {products.length} data
-              entries
+              Showing {products.from} to {products.to} of{' '}
+              {products.total} data entries
             </p>
           </div>
           <div>{/* <SearchBar /> */}</div>
         </div>
         <Tables
-          indexData={indexOfFirstItem}
           columns={columns}
-          data={currentItems}
+          data={products.data}
+          indexData={
+            (products.current_page - 1) * products.per_page
+          }
         />
         <Paginations
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={(page) => setCurrentPage(page)}
+          currentPage={products.current_page}
+          totalPages={products.last_page}
+          onPageChange={handlePageChange}
         />
       </div>
     </DashboardLayout>

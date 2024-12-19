@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   Pagination,
   PaginationContent,
@@ -14,31 +13,94 @@ const Paginations = ({
   currentPage,
   onPageChange,
 }) => {
-  const [page, setPage] = useState(currentPage);
-
-  const handlePrevPage = () => {
-    if (page > 1) {
-      setPage(page - 1);
-      onPageChange(page - 1);
-    }
-  };
-
-  const handleNextPage = () => {
-    if (page < totalPages) {
-      setPage(page + 1);
-      onPageChange(page + 1);
-    }
-  };
-
   const handlePageClick = (pageNumber) => {
-    setPage(pageNumber);
-    onPageChange(pageNumber);
+    if (pageNumber !== currentPage) {
+      onPageChange(pageNumber);
+    }
   };
 
-  const pageNumbers = Array.from(
-    { length: totalPages },
-    (_, i) => i + 1
-  );
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    const maxVisiblePages = 5;
+
+    if (totalPages <= maxVisiblePages) {
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(
+          <PaginationItem key={i}>
+            <PaginationLink
+              href="#"
+              onClick={() => handlePageClick(i)}
+              isActive={i === currentPage}
+            >
+              {i}
+            </PaginationLink>
+          </PaginationItem>
+        );
+      }
+    } else {
+      const startPage = Math.max(1, currentPage - 2);
+      const endPage = Math.min(
+        totalPages,
+        startPage + maxVisiblePages - 1
+      );
+
+      if (startPage > 1) {
+        pageNumbers.push(
+          <PaginationItem key={1}>
+            <PaginationLink
+              href="#"
+              onClick={() => handlePageClick(1)}
+            >
+              1
+            </PaginationLink>
+          </PaginationItem>
+        );
+        if (startPage > 2) {
+          pageNumbers.push(
+            <PaginationItem key="start-ellipsis">
+              <PaginationEllipsis />
+            </PaginationItem>
+          );
+        }
+      }
+
+      for (let i = startPage; i <= endPage; i++) {
+        pageNumbers.push(
+          <PaginationItem key={i}>
+            <PaginationLink
+              href="#"
+              onClick={() => handlePageClick(i)}
+              isActive={i === currentPage}
+            >
+              {i}
+            </PaginationLink>
+          </PaginationItem>
+        );
+      }
+
+      if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+          pageNumbers.push(
+            <PaginationItem key="end-ellipsis">
+              <PaginationEllipsis />
+            </PaginationItem>
+          );
+        }
+        pageNumbers.push(
+          <PaginationItem key={totalPages}>
+            <PaginationLink
+              href="#"
+              onClick={() => handlePageClick(totalPages)}
+            >
+              {totalPages}
+            </PaginationLink>
+          </PaginationItem>
+        );
+      }
+    }
+
+    return pageNumbers;
+  };
 
   return (
     <Pagination>
@@ -46,35 +108,24 @@ const Paginations = ({
         <PaginationItem>
           <PaginationPrevious
             href="#"
-            onClick={handlePrevPage}
-            disabled={page === 1}
-            className={`${page === 1 ? 'pointer-events-none cursor-not-allowed opacity-50' : ''}`}
+            onClick={() => handlePageClick(currentPage - 1)}
+            className={
+              currentPage === 1
+                ? 'pointer-events-none opacity-50'
+                : ''
+            }
           />
         </PaginationItem>
-        {totalPages === 0 && (
-          <PaginationItem>
-            <PaginationEllipsis className="opacity-50" />
-          </PaginationItem>
-        )}
-        {pageNumbers.map((pageNumber) => (
-          <PaginationItem key={pageNumber}>
-            <PaginationLink
-              href="#"
-              onClick={() => handlePageClick(pageNumber)}
-              isActive={pageNumber === page}
-            >
-              {pageNumber}
-            </PaginationLink>
-          </PaginationItem>
-        ))}
+        {renderPageNumbers()}
         <PaginationItem>
           <PaginationNext
             href="#"
-            onClick={handleNextPage}
-            disabled={
-              page === totalPages || totalPages === 0
+            onClick={() => handlePageClick(currentPage + 1)}
+            className={
+              currentPage === totalPages
+                ? 'pointer-events-none opacity-50'
+                : ''
             }
-            className={`${page === totalPages || totalPages === 0 ? 'pointer-events-none cursor-not-allowed opacity-50' : ''}`}
           />
         </PaginationItem>
       </PaginationContent>
