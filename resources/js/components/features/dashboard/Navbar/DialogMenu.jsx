@@ -7,6 +7,7 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from '../../../ui/dialog';
 
@@ -38,9 +39,9 @@ const DialogMenu = () => {
                 className="flex items-center justify-start transition-opacity duration-300 hover:opacity-85"
               >
                 <CircleDollarSign className="mr-3 h-6 w-6" />
-                <span className="font-bold">
+                <DialogTitle className="font-bold">
                   Inventory POS
-                </span>
+                </DialogTitle>
               </Link>
             </Button>
           </DialogHeader>
