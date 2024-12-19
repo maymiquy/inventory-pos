@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -31,6 +34,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('products', ProductController::class);
     Route::resource('customers', CustomerController::class);
     Route::resource('suppliers', SupplierController::class);
+    Route::resource('incomes', IncomeController::class);
+    Route::resource('expenses', ExpenseController::class);
+    Route::resource('reports', ReportController::class);
 });
 
 
