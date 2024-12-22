@@ -6,6 +6,8 @@ use App\Models\Income;
 use App\Models\Product;
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request as FacadesRequest;
 use Inertia\Inertia;
 
 class IncomeController extends Controller
@@ -17,9 +19,9 @@ class IncomeController extends Controller
     {
         $incomes = Income::query()
             ->with('product', 'customer')
-            ->orderBy('created_at', 'desc')
+            ->orderBy('purchase_date', 'desc')
             ->paginate(10)
-            ->transform(function ($income) {
+            ->through(function ($income) {
                 return [
                     'id' => $income->id,
                     'product' => $income->product->name,
@@ -27,12 +29,13 @@ class IncomeController extends Controller
                     'quantity' => $income->quantity,
                     'price_per_item' => $income->price_per_item,
                     'total_amount' => $income->total_amount,
-                    'purchase_date' => $income->purchase_date,
+                    'purchase_date' => $income->purchase_date
                 ];
             });
 
         return Inertia::render('Incomes/Index', [
             'incomes' => $incomes,
+            'filters' => FacadesRequest::all('search', 'trashed'),
         ]);
     }
 
@@ -41,12 +44,7 @@ class IncomeController extends Controller
      */
     public function create()
     {
-        $products = Product::all();
-        $customers = Customer::all();
-        return Inertia::render('Incomes/Create', [
-            'products' => $products,
-            'customers' => $customers,
-        ]);
+        return Inertia::render('Incomes/Create', $this->getFormData());
     }
 
     /**
@@ -54,18 +52,35 @@ class IncomeController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $validated = $request->validate([
             'product_id' => 'required|exists:products,id',
             'customer_id' => 'required|exists:customers,id',
-            'quantity' => 'required|numeric',
-            'price_per_item' => 'required|numeric',
-            'total_amount' => 'required|numeric',
+            'quantity' => 'required|integer|min:1',
+            'price_per_item' => 'required|numeric|min:0',
+            'total_amount' => 'required|numeric|min:0',
             'purchase_date' => 'required|date',
         ]);
 
-        Income::create($validatedData);
+        try {
+            DB::beginTransaction();
 
-        return redirect()->route('incomes.index');
+            $product = Product::findOrFail($validated['product_id']);
+
+            if ($product->quantity < $validated['quantity']) {
+                throw new \Exception("Insufficient stock. Available: {$product->quantity}, Requested: {$validated['quantity']}");
+            }
+
+            Income::create($validated);
+
+            $product->decreaseStock($validated['quantity']);
+
+            DB::commit();
+
+            return redirect()->route('incomes.index');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => $e->getMessage()])->withInput();
+        }
     }
 
     /**
@@ -84,14 +99,12 @@ class IncomeController extends Controller
      */
     public function edit(Income $income)
     {
-        $products = Product::all();
-        $customers = Customer::all();
-        $income->load('product', 'customer');
-        return Inertia::render('Incomes/Edit', [
-            'income' => $income,
-            'products' => $products,
-            'customers' => $customers,
-        ]);
+        $income->load('product:id,name,price', 'customer:id,name');
+
+        return Inertia::render('Incomes/Edit', array_merge(
+            ['income' => $income],
+            $this->getFormData()
+        ));
     }
 
     /**
@@ -99,18 +112,40 @@ class IncomeController extends Controller
      */
     public function update(Request $request, Income $income)
     {
-        $validatedData = $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'customer_id' => 'required|exists:customers,id',
-            'quantity' => 'required|numeric',
-            'price_per_item' => 'required|numeric',
-            'total_amount' => 'required|numeric',
+        $validated = $request->validate([
+            'quantity' => 'required|integer|min:1',
+            'price_per_item' => 'required|numeric|min:0',
+            'total_amount' => 'required|numeric|min:0',
             'purchase_date' => 'required|date',
         ]);
 
-        Income::where('id', $income->id)->update($validatedData);
+        try {
+            DB::beginTransaction();
 
-        return redirect()->route('incomes.index');
+            $product = $income->product;
+            $oldQuantity = $income->quantity;
+            $newQuantity = $validated['quantity'];
+
+            if ($newQuantity > $oldQuantity) {
+                $additionalQuantity = $newQuantity - $oldQuantity;
+                if ($product->quantity < $additionalQuantity) {
+                    throw new \Exception("Insufficient stock. Available: {$product->quantity}, Additional Requested: {$additionalQuantity}");
+                }
+                $product->decreaseStock($additionalQuantity);
+            } elseif ($newQuantity < $oldQuantity) {
+                $returnedQuantity = $oldQuantity - $newQuantity;
+                $product->increaseStock($returnedQuantity);
+            }
+
+            $income->update($validated);
+
+            DB::commit();
+
+            return redirect()->route('incomes.index');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => $e->getMessage()])->withInput();
+        }
     }
 
     /**
@@ -120,5 +155,13 @@ class IncomeController extends Controller
     {
         Income::destroy($income->id);
         return redirect()->route('incomes.index');
+    }
+
+    private function getFormData()
+    {
+        return [
+            'products' => Product::select('id', 'name', 'price')->get(),
+            'customers' => Customer::select('id', 'name')->get(),
+        ];
     }
 }

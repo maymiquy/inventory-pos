@@ -25,4 +25,19 @@ class Product extends Model
     {
         return $this->hasMany(Income::class);
     }
+
+    public function decreaseStock($amount)
+    {
+        if ($this->quantity < $amount) {
+            throw new \Exception('Insufficient stock for this product.');
+        }
+        $this->decrement('quantity', $amount);
+        $this->save();
+    }
+
+    public function increaseStock($amount)
+    {
+        $this->increment('quantity', $amount);
+        $this->save();
+    }
 }
