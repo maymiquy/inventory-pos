@@ -1,9 +1,9 @@
-import InputError from '@/components/ui/input-error';
-import Input from '@/components/ui/text-input';
 import { Transition } from '@headlessui/react';
 import { Link, useForm, usePage } from '@inertiajs/react';
-import { Button } from '../../../components/ui/button';
-import { Label } from '../../../components/ui/label';
+import { Button } from '../../ui/button';
+import { Input } from '../../ui/input';
+import InputError from '../../ui/input-error';
+import { Label } from '../../ui/label';
 
 export default function UpdateProfileInformation({
   mustVerifyEmail,

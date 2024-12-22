@@ -1,7 +1,7 @@
 import DashboardLayout from '@/layouts/DashboardLayout';
-import DeleteUserForm from './Partials/DeleteUserForm';
-import UpdatePasswordForm from './Partials/UpdatePasswordForm';
-import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm';
+import DeleteUserForm from '../../components/features/profile/DeleteUserForm';
+import UpdatePasswordForm from '../../components/features/profile/UpdatePasswordForm';
+import UpdateProfileInformationForm from '../../components/features/profile/UpdateProfileInformationForm';
 
 export default function Edit({ mustVerifyEmail, status }) {
   return (
