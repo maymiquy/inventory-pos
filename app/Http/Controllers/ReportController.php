@@ -12,7 +12,17 @@ class ReportController extends Controller
 {
     public function index()
     {
-        $reports = Report::all();
+        $reports = Report::query()
+            ->orderBy('month', 'desc')
+            ->paginate(10)
+            ->through(fn($report) => [
+                'id' => $report->id,
+                'year' => $report->year,
+                'month' => $report->month,
+                'quantity' => $report->quantity,
+                'total_income' => $report->total_income,
+                'total_expense' => $report->total_expense
+            ]);
 
         return Inertia::render('Reports/Index', [
             'reports' => $reports,
