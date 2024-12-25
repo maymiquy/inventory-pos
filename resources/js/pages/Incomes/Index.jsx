@@ -8,8 +8,8 @@ const Index = () => {
 
   const columns = [
     { title: '', field: 'id' },
-    { title: 'Customer', field: 'customer_id' },
-    { title: 'Product', field: 'product_id' },
+    { title: 'Customer', field: 'customer' },
+    { title: 'Product', field: 'product' },
     { title: 'Quantity', field: 'quantity' },
     { title: 'Price per Item', field: 'price_per_item' },
     { title: 'Total Amount', field: 'total_amount' },

@@ -8,12 +8,12 @@ const Index = () => {
 
   const columns = [
     { title: '', field: 'id' },
-    { title: 'Supplier', field: 'supplier_id' },
-    { title: 'Product', field: 'product_id' },
+    { title: 'Supplier', field: 'supplier' },
+    { title: 'Product', field: 'product' },
     { title: 'Quantity', field: 'quantity' },
     { title: 'Price per Item', field: 'price_per_item' },
     { title: 'Total Amount', field: 'total_amount' },
-    { title: 'Transaction Date', field: 'purchase_date' },
+    { title: 'Transaction Date', field: 'restock_date' },
   ];
 
   const handlePageChange = (page) => {
@@ -39,14 +39,15 @@ const Index = () => {
         </div>
         <Tables
           columns={columns}
-          data={expenses.data}
+          data={expenses?.data}
           indexData={
-            (expenses.current_page - 1) * expenses.per_page
+            (expenses?.current_page - 1) *
+            expenses?.per_page
           }
         />
         <Paginations
-          currentPage={expenses.current_page}
-          totalPages={expenses.last_page}
+          currentPage={expenses?.current_page}
+          totalPages={expenses?.last_page}
           onPageChange={handlePageChange}
         />
       </div>
