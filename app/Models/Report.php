@@ -9,10 +9,9 @@ class Report extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'year',
-        'month',
-        'total_income',
-        'total_expense',
+    protected $fillable = ['report_date', 'total_income', 'total_expense'];
+
+    protected $casts = [
+        'report_date' => 'date',
     ];
 }
