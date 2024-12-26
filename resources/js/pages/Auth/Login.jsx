@@ -1,11 +1,11 @@
-import Checkbox from '@/components/ui/checkbox';
-import InputError from '@/components/ui/input-error';
-import GuestLayout from '@/layouts/GuestLayout';
 import { Head, useForm } from '@inertiajs/react';
 import { Button } from '../../components/ui/button';
+import { Checkbox } from '../../components/ui/checkbox';
 import { Input } from '../../components/ui/input';
+import InputError from '../../components/ui/input-error';
 import { Label } from '../../components/ui/label';
 import { toast } from '../../hooks/use-toast';
+import GuestLayout from '../../layouts/GuestLayout';
 
 export default function Login({ status }) {
   const { data, setData, post, processing, errors, reset } =
