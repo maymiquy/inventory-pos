@@ -36,7 +36,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('suppliers', SupplierController::class);
     Route::resource('incomes', IncomeController::class);
     Route::resource('expenses', ExpenseController::class);
-    Route::resource('reports', ReportController::class);
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::post('/reports/generate', [ReportController::class, 'generateReports'])->name('reports.generate');
+    Route::post('/reports/avg', [ReportController::class, 'calculateAverages'])->name('reports.avg');
+    Route::delete('/reports/{report}', [ReportController::class, 'destroy'])->name('reports.destroy');
 });
 
 
