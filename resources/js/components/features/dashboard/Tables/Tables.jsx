@@ -1,5 +1,10 @@
 import { router } from '@inertiajs/react';
-import { Pen, PlusCircle, Trash } from 'lucide-react';
+import {
+  ChartSpline,
+  Pen,
+  PlusCircle,
+  Trash,
+} from 'lucide-react';
 import { toast } from '../../../../hooks/use-toast';
 import { formatParagraph } from '../../../../utils/formatParagraph';
 import { Button } from '../../../ui/button';
@@ -23,7 +28,12 @@ import {
   TooltipTrigger,
 } from '../../../ui/tooltip';
 
-const Tables = ({ columns, data, indexData }) => {
+const Tables = ({
+  columns,
+  data,
+  indexData,
+  onCalculateAverage,
+}) => {
   const pathname = window.location.pathname.slice(1);
   const handleDelete = (id) => {
     router.delete(
@@ -31,6 +41,7 @@ const Tables = ({ columns, data, indexData }) => {
         id,
       }),
       {
+        preserveState: true,
         preserveScroll: true,
         onSuccess: () => {
           toast({
@@ -53,7 +64,7 @@ const Tables = ({ columns, data, indexData }) => {
   };
 
   return (
-    <ScrollArea className="w-full whitespace-nowrap rounded-md border pb-4">
+    <ScrollArea className="w-full whitespace-nowrap rounded-md border">
       <Table className="relative w-full max-w-lg border-collapse overflow-x-scroll rounded-[4px] shadow-xl sm:max-w-full md:max-w-full">
         <TableHeader className="border-b border-zinc-300 bg-muted/100">
           <TableRow>
@@ -71,7 +82,7 @@ const Tables = ({ columns, data, indexData }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data?.length > 0 ? (
+          {data.length > 0 ? (
             data.map((row, index) => (
               <TableRow
                 className="hover:bg-zinc-100"
@@ -97,7 +108,11 @@ const Tables = ({ columns, data, indexData }) => {
                   >
                     {column.field === 'id' ? (
                       indexData + index + 1
-                    ) : column.field === 'price' ? (
+                    ) : column.field === 'price' ||
+                      column.field === 'total_income' ||
+                      column.field === 'total_expense' ||
+                      column.field === 'price_per_item' ||
+                      column.field === 'total_amount' ? (
                       `$ ${row[column.field]}`
                     ) : column.field === 'description' ||
                       column.field === 'name' ? (
@@ -120,27 +135,32 @@ const Tables = ({ columns, data, indexData }) => {
                     <TooltipProvider
                       disableHoverableContent
                     >
-                      <Tooltip delayDuration={500}>
-                        <TooltipTrigger asChild>
-                          <Button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              router.visit(
-                                route(`${pathname}.edit`, {
-                                  id: row.id,
-                                })
-                              );
-                            }}
-                            className="bg-indigo-500 text-white shadow-sm transition duration-150 ease-in-out hover:bg-indigo-600 hover:shadow-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                            size="icon"
-                          >
-                            <Pen className="h-4 w-4" />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent side="bottom">
-                          Edit data
-                        </TooltipContent>
-                      </Tooltip>
+                      {pathname !== 'reports' && (
+                        <Tooltip delayDuration={500}>
+                          <TooltipTrigger asChild>
+                            <Button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                router.visit(
+                                  route(
+                                    `${pathname}.edit`,
+                                    {
+                                      id: row.id,
+                                    }
+                                  )
+                                );
+                              }}
+                              className="bg-indigo-500 text-white shadow-sm transition duration-150 ease-in-out hover:bg-indigo-600 hover:shadow-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                              size="icon"
+                            >
+                              <Pen className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent side="bottom">
+                            Edit data
+                          </TooltipContent>
+                        </Tooltip>
+                      )}
                       <Tooltip delayDuration={500}>
                         <TooltipTrigger asChild>
                           <Button
@@ -169,19 +189,17 @@ const Tables = ({ columns, data, indexData }) => {
               <TableCell colSpan={columns.length + 1}>
                 <div className="flex w-full flex-col items-center justify-center py-24">
                   <p className="text-center text-xl text-zinc-500">
-                    No data availables
+                    No data available
                   </p>
-                  {data?.length === 0 ||
-                    (data?.length === undefined && (
-                      <span className="text-center text-xs font-extralight text-zinc-400">
-                        0 rows affected (
-                        {(
-                          Math.random() * 0.3 +
-                          0.2
-                        ).toFixed(1)}{' '}
-                        s)
-                      </span>
-                    ))}
+                  {data.length === 0 && (
+                    <span className="text-center text-xs font-extralight text-zinc-400">
+                      0 rows affected (
+                      {(Math.random() * 0.3 + 0.2).toFixed(
+                        1
+                      )}{' '}
+                      s)
+                    </span>
+                  )}
                 </div>
               </TableCell>
             </TableRow>
@@ -191,20 +209,37 @@ const Tables = ({ columns, data, indexData }) => {
         <TableFooter className="border-t border-zinc-300 bg-muted/100">
           <TableRow>
             <TableCell colSpan={columns.length + 1}>
-              <Button
-                onClick={() =>
-                  router.visit(route(`${pathname}.create`))
-                }
-                className="w-full outline-[0.2px] hover:outline hover:outline-green-600"
-                variant="outline"
-              >
-                <p className="mr-2 text-zinc-600">
-                  Add new data
-                </p>
-                <span>
-                  <PlusCircle className="h-4 w-4 text-green-600" />
-                </span>
-              </Button>
+              {pathname !== 'reports' ? (
+                <Button
+                  onClick={() =>
+                    router.visit(
+                      route(`${pathname}.create`)
+                    )
+                  }
+                  className="w-full outline-[0.2px] hover:outline hover:outline-green-600"
+                  variant="outline"
+                >
+                  <p className="mr-2 text-zinc-600">
+                    Add new data
+                  </p>
+                  <span>
+                    <PlusCircle className="h-4 w-4 text-green-600" />
+                  </span>
+                </Button>
+              ) : (
+                <Button
+                  onClick={onCalculateAverage}
+                  className="w-full outline-[0.2px] hover:outline hover:outline-green-600"
+                  variant="outline"
+                >
+                  <p className="mr-2 text-zinc-600">
+                    Get Average Summary
+                  </p>
+                  <span>
+                    <ChartSpline className="h-4 w-4 text-indigo-600" />
+                  </span>
+                </Button>
+              )}
             </TableCell>
           </TableRow>
         </TableFooter>
