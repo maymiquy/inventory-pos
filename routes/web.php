@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\SupplierController;
@@ -20,9 +21,9 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -41,7 +42,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/reports/avg', [ReportController::class, 'calculateAverages'])->name('reports.avg');
     Route::delete('/reports/{report}', [ReportController::class, 'destroy'])->name('reports.destroy');
 });
-
-
 
 require __DIR__ . '/auth.php';
