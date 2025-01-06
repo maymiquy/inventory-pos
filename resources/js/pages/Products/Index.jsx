@@ -1,7 +1,7 @@
 import { router, usePage } from '@inertiajs/react';
-import Paginations from '../../Components/common/Paginations';
-import Tables from '../../Components/features/dashboard/Tables/Tables';
-import DashboardLayout from '../../Layouts/DashboardLayout';
+import Paginations from '../../components/common/Paginations';
+import Tables from '../../components/features/dashboard/Tables/Tables';
+import DashboardLayout from '../../layouts/DashboardLayout';
 
 const Index = () => {
   const { products } = usePage().props;

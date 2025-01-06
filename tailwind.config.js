@@ -1,4 +1,5 @@
 import forms from '@tailwindcss/forms';
+import twanimate from 'tailwindcss-animate';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -57,6 +58,5 @@ export default {
             },
         },
     },
-
-    plugins: [forms, require('tailwindcss-animate')],
+    plugins: [forms, twanimate],
 };

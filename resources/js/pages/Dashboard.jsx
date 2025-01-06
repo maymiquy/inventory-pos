@@ -3,7 +3,7 @@ import {
   TrendingDown,
   TrendingUp,
 } from 'lucide-react';
-import { Grid } from '../components/common/grid';
+import { Grid } from '../components/common/Grid';
 import {
   AreaChart,
   BarChart,

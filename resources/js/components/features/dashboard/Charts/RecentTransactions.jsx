@@ -3,8 +3,8 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from '@/Components/ui/card';
-import { ScrollArea } from '@/Components/ui/scroll-area';
+} from '@/components/ui/card';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { formatCurrency } from '@/utils/formatCurrency';
 import { formatDistanceToNow } from 'date-fns';
 import {
