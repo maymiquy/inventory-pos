@@ -36,7 +36,7 @@ export function DropzoneFile() {
   };
 
   return (
-    <div className="grid w-full max-w-sm items-center gap-1.5">
+    <div className="grid w-full items-center gap-1.5 lg:max-w-sm xl:max-w-md">
       <Label htmlFor="picture" />
       <div
         className={`relative h-[270px] rounded-lg border-2 border-dashed transition-all duration-200 ease-in-out ${

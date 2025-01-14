@@ -52,8 +52,8 @@ const FormProduct = ({
 
   return (
     <form onSubmit={submit}>
-      <div className="flex w-full flex-col-reverse justify-center md:justify-normal lg:flex-row lg:space-x-24">
-        <div className="flex w-full flex-col space-y-12 lg:w-2/4">
+      <div className="flex w-full flex-col-reverse justify-center lg:flex-row lg:justify-between lg:space-x-6 xl:space-x-2">
+        <div className="flex w-full flex-col space-y-12">
           <div className="mt-4 max-w-xl">
             <Label
               htmlFor="name"
@@ -152,7 +152,7 @@ const FormProduct = ({
           </div>
         </div>
 
-        <div className="mt-4 max-w-md">
+        <div className="flex w-full sm:pt-6 lg:max-w-md lg:justify-end">
           <DropzoneFile />
           {errors.image && (
             <p className="mt-2 text-sm text-red-600">
