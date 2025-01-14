@@ -2,6 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+    *::-webkit-scrollbar {
+        width: 14px;
+    }
+
+    *::-webkit-scrollbar-track {
+        @apply bg-transparent;
+    }
+
+    *::-webkit-scrollbar-thumb {
+        @apply bg-muted-foreground/30;
+        @apply rounded-full;
+        @apply border-2;
+        @apply border-r-4;
+        @apply border-solid;
+        @apply border-transparent;
+        @apply bg-clip-content;
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+        @apply bg-muted-foreground/50;
+    }
+}
+
 .rdp-vhidden {
     @apply absolute;
     @apply top-0;
