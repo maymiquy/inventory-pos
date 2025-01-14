@@ -47,6 +47,9 @@ const DatePicker = forwardRef(
             selected={value ? new Date(value) : undefined}
             onSelect={handleSelect}
             initialFocus
+            fromYear={1960}
+            toYear={new Date().getFullYear() + 1}
+            captionLayout="dropdown-buttons"
           />
         </PopoverContent>
       </Popover>
